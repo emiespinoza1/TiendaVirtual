@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TextInput } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TextInput } from 'react-native';
 import Categoria from '../components/Categoria';
 import Producto from '../components/Producto';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -7,61 +7,69 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 const PantallaTienda = () => {
   const [busqueda, setBusqueda] = useState('');
 
+  // arrreglo de objetos de categoria
   const categorias = [
-    { nombre: 'Fashion', icono: 'hanger' },
-    { nombre: 'Cars', icono: 'car' },
-    { nombre: 'Babies', icono: 'baby-bottle-outline' },
-    { nombre: 'Sport', icono: 'basketball' },
+    { id: '1', nombre: 'Fashion', icono: 'hanger' },
+    { id: '2', nombre: 'Cars', icono: 'car' },
+    { id: '3', nombre: 'Babies', icono: 'baby-bottle-outline' },
+    { id: '4', nombre: 'Sport', icono: 'basketball' },
   ];
 
+  // Arreglo de objetos de productos
   const productos = [
     { 
-      precio: '27', 
-      nombre: 'White sneakers', 
-      tiempo: '10 hours ago',
-      imagen: require('../assets/imagenes/white_sneakers.jpg'),
-      colorFondo: '#f3e5f5' 
+      id: '1',
+      precio: '$ 27', 
+      nombreP: 'White sneakers', 
+      horas: '10',
+      foto: require('../assets/imagenes/white_sneakers.jpg'),
+      colorFondo: '#f3e5f5'
     },
     { 
-      precio: '12', 
-      nombre: 'A Room of One\'s Own', 
-      tiempo: '4 hours ago',
-      imagen: require('../assets/imagenes/room_ones_own.jpg'),
-      colorFondo: '#ffebee' 
+      id: '2',
+      precio: '$ 12', 
+      nombreP: 'A Room of One\'s Own', 
+      horas: '4',
+      foto: require('../assets/imagenes/room_ones_own.jpg'),
+      colorFondo: '#ffebee'
     },
     { 
-      precio: '12', 
-      nombre: 'Teddy', 
-      tiempo: '17 hours ago',
-      imagen: require('../assets/imagenes/teddy.jpg'),
-      colorFondo: '#fff3e0' 
+      id: '3',
+      precio: '$ 12', 
+      nombreP: 'Teddy', 
+      horas: '17',
+      foto: require('../assets/imagenes/teddy.jpg'),
+      colorFondo: '#fff3e0'
     },
     { 
-      precio: '50', 
-      nombre: 'Wireless headphones', 
-      tiempo: '8 hours ago',
-      imagen: require('../assets/imagenes/headphones.avif'),
-      colorFondo: '#e3f2fd' 
+      id: '4',
+      precio: '$ 50', 
+      nombreP: 'Wireless headphones', 
+      horas: '8',
+      foto: require('../assets/imagenes/headphones.avif'),
+      colorFondo: '#e3f2fd'
     },
     { 
-      precio: '170', 
-      nombre: 'Camera - Video & photo', 
-      tiempo: '14 hours ago',
-      imagen: require('../assets/imagenes/camera.png'),
-      colorFondo: '#e8f5e8' 
+      id: '5',
+      precio: '$ 170', 
+      nombreP: 'Camera - Video & photo', 
+      horas: '14',
+      foto: require('../assets/imagenes/camera.png'),
+      colorFondo: '#e8f5e8'
     },
     { 
-      precio: '50', 
-      nombre: 'Makeup travel bag', 
-      tiempo: '20 hours ago',
-      imagen: require('../assets/imagenes/makeup_bag.jpg'),
-      colorFondo: '#fce4ec' 
+      id: '6',
+      precio: '$ 50', 
+      nombreP: 'Makeup travel bag', 
+      horas: '20',
+      foto: require('../assets/imagenes/makeup_bag.jpg'),
+      colorFondo: '#fce4ec'
     },
   ];
 
-  //  productos por búsqueda
+  // productos por búsqueda
   const productosFiltrados = productos.filter(producto =>
-    producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    producto.nombreP.toLowerCase().includes(busqueda.toLowerCase())
   );
 
   return (
@@ -77,41 +85,39 @@ const PantallaTienda = () => {
         />
       </View>
 
-      {/* ScrollView horizontal para categorías - centrado*/}
+      {/* Categorias con flatList */}
       <View style={styles.categoriasContainer}>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false} 
+        <FlatList
+          horizontal
+          data={categorias}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Categoria nombre={item.nombre} icono={item.icono} />
+          )}
           contentContainerStyle={styles.scrollCategoriasContent}
-        >
-          {categorias.map((categoria, index) => (
-            <Categoria 
-              key={index}
-              nombre={categoria.nombre} 
-              icono={categoria.icono} 
-            />
-          ))}
-        </ScrollView>
+        />
       </View>
 
       {/* Título News */}
       <Text style={styles.tituloSeccion}>News</Text>
 
-      {/* Lista de productos en 2 columnas */}
-      <ScrollView style={styles.listaProductos}>
-        <View style={styles.gridProductos}>
-          {productosFiltrados.map((producto, index) => (
-            <Producto
-              key={index}
-              precio={producto.precio}
-              nombre={producto.nombre}
-              tiempo={producto.tiempo}
-              imagen={producto.imagen}
-              colorFondo={producto.colorFondo}
-            />
-          ))}
-        </View>
-      </ScrollView>
+      {/* Productos  con flatList*/}
+      <FlatList
+        data={productosFiltrados}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        contentContainerStyle={styles.listaProductos}
+        columnWrapperStyle={styles.filaProductos}
+        renderItem={({ item }) => (
+          <Producto
+            foto={item.foto}
+            nombreP={item.nombreP}
+            precio={item.precio}
+            horas={item.horas}
+            colorFondo={item.colorFondo}
+          />
+        )}
+      />
     </View>
   );
 };
@@ -156,13 +162,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   listaProductos: {
-    flex: 1,
-  },
-  gridProductos: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
     paddingHorizontal: 10,
+  },
+  filaProductos: {
+    justifyContent: 'space-between',
   },
 });
 

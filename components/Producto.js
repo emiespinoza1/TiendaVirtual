@@ -1,19 +1,19 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-const Producto = ({ precio, nombre, tiempo, imagen, colorFondo = '#ffffff' }) => {
+const Producto = ({ foto, nombreP, precio, horas, colorFondo = '#ffffff' }) => {
   return (
     <View style={styles.container}>
-      {/* Contenedor de la imagen con color de fondo */}
+      {/* contenedor de  color */}
       <View style={[styles.imagenContainer, { backgroundColor: colorFondo }]}>
-        <Image source={imagen} style={styles.imagen} />
+        <Image source={foto} style={styles.imagen} />
       </View>
       
-      {/* Contenedor del texto  */}
+      {/* contenedor blanco */}
       <View style={styles.textoContainer}>
-        <Text style={styles.precio}>${precio}</Text>
-        <Text style={styles.nombre}>{nombre}</Text>
-        <Text style={styles.tiempo}>{tiempo}</Text>
+        <Text style={styles.precio}>{precio}</Text>
+        <Text style={styles.nombre}>{nombreP}</Text>
+        <Text style={styles.tiempo}>{horas} hours ago</Text>
       </View>
     </View>
   );
@@ -21,13 +21,11 @@ const Producto = ({ precio, nombre, tiempo, imagen, colorFondo = '#ffffff' }) =>
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 5,
+    width: '48%', 
     marginBottom: 15,
-    width: '47%', 
     borderRadius: 12,
-   
-    backgroundColor: 'white', 
-    overflow: 'hidden', 
+    backgroundColor: 'white',
+    overflow: 'hidden',
   },
   imagenContainer: {
     padding: 8,
@@ -41,7 +39,7 @@ const styles = StyleSheet.create({
   },
   textoContainer: {
     padding: 12,
-    backgroundColor: 'white', 
+    backgroundColor: 'white',
   },
   precio: {
     fontSize: 16,
